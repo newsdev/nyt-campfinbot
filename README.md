@@ -33,6 +33,11 @@ CAMPFINBOT_FILINGS_HOST=projects.nytimes.com
 touch /tmp/campfinbot.log
 ```
 
+* Preload data for the bot. It needs some committees and would appreciate knowing about old filings so it doesn't spam your slack channel with stuff you already know about.
+```
+python -m campfinbot.preload
+```
+
 * Run the bot itself.
 ```
 python -m campfinbot.bot
