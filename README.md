@@ -48,13 +48,21 @@ python -m campfinbot.bot
 tail -f /tmp/campfinbot.log
 ``` 
 
-* To kill the bot, kill its process (should fix this).
+## Deployment
+* Make an upshot script in `/etc/init/campfinbot.conf` and use this template.
 ```
-ps aux | grep bot
+start on runlevel [2345]
+stop on runlevel [!2345]
 
-jbowers         47764   1.1  0.3  2518012  45180   ??  S     9:17AM   0:03.95 python -m campfinbot.bot
-jbowers         47938   0.0  0.0  2432772    648 s006  S+    9:21AM   0:00.00 grep bot
-jbowers         47760   0.0  0.0  2432760    540 s007  S+    9:17AM   0:00.01 tail -f campfinbot.log
+respawn
 
-kill -9 47764
+script
+  export CAMPFINBOT_CANDIDATES_HOST='interactive-api.newsdev.nytimes.com'
+  export CAMPFINBOT_SLACK_CHANNEL='C012345'
+  export CAMPFINBOT_FILINGS_HOST='projects.nytimes.com'
+  export CAMPFINBOT_SLACK_TOKEN='xoxb-1234567890-AbcDefGhijkLmNOpQRstUvWXyz'
+  export CAMPFINBOT_PRD_HOST='ec2-0-0-0-0.compute-99.amazonaws.com'
+  export CAMPFINBOT_MONGO_URL='127.0.0.1:12345'
+  cd /home/ubuntu/nyt-campfinbot && /home/ubuntu/.virtualenvs/nyt-campfinbot/bin/python /home/ubuntu/nyt-campfinbot/campfinbot/bot.py
+end script
 ```
