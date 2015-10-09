@@ -37,9 +37,11 @@ utils.load_committees(
 # Load filings associated with presidential campaign committees.
 utils.load_filings(
     campfinbot.MONGODB_DATABASE.presidential_filings,
-    [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_committees.find()])
+    [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_committees.find()],
+    recent_filings)
 
 # Load filings associated with presidential PACs and SuperPACs.
 utils.load_filings(
     campfinbot.MONGODB_DATABASE.presidential_pac_filings,
-    [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_pac_committees.find()])
+    [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_pac_committees.find()],
+    recent_filings)
