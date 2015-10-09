@@ -16,9 +16,10 @@ def presidential_pacs_recent():
     """
     recent_filings = json.loads(requests.get(campfinbot.FILINGS_URL).content)['results']
 
-    utils.load_filings(
+    messages = utils.load_filings(
         campfinbot.MONGODB_DATABASE.presidential_pac_filings,
         [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_pac_committees.find()],
+        recent_filings,
         alert=True)
 
     for message in messages:

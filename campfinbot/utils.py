@@ -22,7 +22,7 @@ def load_committees(collection, committees):
             collection.insert_one(c)
 
 
-def load_filings(collection, committees, alert=False):
+def load_filings(collection, committees, recent_filings, alert=False):
     """
     Given a collection of filings, a list of committees, and a list of filings, will insert
     new filings into the collection.

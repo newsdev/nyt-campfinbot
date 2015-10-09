@@ -84,8 +84,6 @@ class RtmBot(object):
             except Exception, e:
                 print "error loading plugin %s: %s" % (name, e)
 
-        print self.bot_plugins
-
 class Plugin(object):
     def __init__(self, name, plugin_config={}):
         self.name = name
@@ -168,12 +166,11 @@ class UnknownChannel(Exception):
 def main_loop():
     logging.basicConfig(filename='/tmp/%s.log' % NAME.lower(), level=logging.INFO, format='%(asctime)s %(message)s')
     logging.info(directory)
+    bot.start()
     try:
         bot.start()
     except KeyboardInterrupt:
         sys.exit(0)
-    except:
-        logging.exception('OOPS')
 
 if __name__ == "__main__":
     directory = os.path.dirname(sys.argv[0])
@@ -185,6 +182,4 @@ if __name__ == "__main__":
     files_currently_downloading = []
     job_hash = {}
 
-    import daemon
-    with daemon.DaemonContext():
-        main_loop()
+    main_loop()

@@ -49,7 +49,7 @@ def e(environment):
 
 @api.task
 def clone():
-    api.run('git clone git@github.com:newsdev/%s.git /home/ubuntu/%s' % (PROJECT_NAME, PROJECT_NAME)
+    api.run('git clone git@github.com:newsdev/%s.git /home/ubuntu/%s' % (PROJECT_NAME, PROJECT_NAME))
 
 @api.task
 def pull():
