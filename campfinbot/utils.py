@@ -19,7 +19,7 @@ def load_committees(collection, committees):
     collection.remove()
     for c in committees:
         if not collection.find_one({"committee_id": c["committee_id"]}):
-            collection.insert_one(c)
+            collection.insert(c)
 
 
 def load_filings(collection, committees, recent_filings, alert=False):
@@ -32,7 +32,7 @@ def load_filings(collection, committees, recent_filings, alert=False):
     for filing in recent_filings:
         if filing['fec_committee_id'] in committees:
             if not collection.find_one({'filing_id': filing['filing_id']}):
-                collection.insert_one(filing)
+                collection.insert(filing)
 
                 if alert:
                     message = "*%s* has just filed.\n%s" % (filing['committee_name'], filing['fec_uri'])
