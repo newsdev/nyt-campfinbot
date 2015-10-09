@@ -1,7 +1,11 @@
 backports.ssl-match-hostname==3.4.0.2
 docutils==0.12
+ecdsa==0.13
+Fabric==1.10.2
 humanize==0.5.1
 lockfile==0.10.2
+paramiko==1.15.3
+pycrypto==2.6.1
 pymongo==3.0.3
 python-daemon==2.0.5
 requests==2.7.0
