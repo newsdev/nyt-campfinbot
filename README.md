@@ -49,7 +49,7 @@ tail -f /tmp/campfinbot.log
 ``` 
 
 ## Deployment
-* Make an upshot script in `/etc/init/campfinbot.conf` and use this template.
+* Make an Upstart script in `/etc/init/campfinbot.conf` and use this template.
 ```
 start on runlevel [2345]
 stop on runlevel [!2345]
