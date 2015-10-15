@@ -7,15 +7,9 @@ Preloaded filings make sure that we don't announce filings that aren't
 important.
 """
 
-import humanize
-import json
-import os
-import requests
-import time
-import random
-from sets import Set
-
 import campfinbot
+import json
+import requests
 from campfinbot import utils
 
 recent_filings = json.loads(requests.get(campfinbot.FILINGS_URL).content)['results']
