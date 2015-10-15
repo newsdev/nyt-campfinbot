@@ -42,9 +42,9 @@ def load_filings(collection, committees, recent_filings, alert=False):
                             message = "*%s* has just filed.\n%s" % (filing['committee_name'], filing['fec_uri'])
 
                             try:
-                                message += "\n\tContributions: $%s" % humanize.intcomma(round(filing['receipts_total'], 2))
+                                message += "\n\tReceipts: $%s" % humanize.intcomma(round(filing['receipts_total'], 2))
                             except:
-                                message += "\n\tContributions: %s" % filing['receipts_total']
+                                message += "\n\tReceipts: %s" % filing['receipts_total']
 
                             try:
                                 message += "\n\tCash on hand: $%s" % humanize.intcomma(round(filing['cash_on_hand'], 2))
