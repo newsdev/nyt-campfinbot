@@ -14,6 +14,12 @@ def presidential_pacs_recent():
     Processes those filings looking for new ones.
     Returns Slack-formatted messages if something is new.
     """
+
+    candidates = [utils.format_candidate(c) for c in json.loads(requests.get(campfinbot.CANDIDATES_URL).content)['results']]
+    utils.load_committees(
+        campfinbot.MONGODB_DATABASE.presidential_committees,
+        [a['campaign_committee'] for a in candidates])
+
     recent_filings = json.loads(requests.get(campfinbot.FILINGS_URL).content)['results']
 
     messages = utils.load_filings(
