@@ -12,3 +12,12 @@ FILINGS_URL = "http://%s/campfin/svc/elections/us/v3/finances/2016/filings.json"
 
 MONGODB_CLIENT = MongoClient(os.environ.get('CAMPFINBOT_MONGO_URL', 'mongodb://localhost:27017/'))
 MONGODB_DATABASE = MONGODB_CLIENT.campfinbot
+
+#generally we want to load new committees each time we run to keep up to date
+#but doing so makes debugging very hard, so you can set this envvar locally
+#which will let you add new committees that don't get overwritten
+#in order to test specific situations.
+LOAD_COMMITTEES = os.environ.get("LOAD_COMMITTEES", True)
+if LOAD_COMMITTEES.lower() == 'false':
+    #ARG it reads the env var False as a string!!!! fix:
+    LOAD_COMMITTEES = False
