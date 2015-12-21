@@ -39,8 +39,11 @@ def load_filings(collection, committees, recent_filings, alert=False):
                         collection.insert(filing)
 
                         if alert:
-                            message = "*%s* has just filed.\n%s" % (filing['committee_name'], filing['fec_uri'])
-
+                            message = "*%s* has just filed" % filing['committee_name']
+                            if filing['is_amendment']:
+                                message += " AN AMENDMENT.\n%s" % filing['fec_uri']
+                            else:
+                                message += ".\n%s" % filing['fec_uri']
                             try:
                                 message += "\n\tReceipts: $%s" % humanize.intcomma(round(filing['receipts_total'], 2))
                             except:
