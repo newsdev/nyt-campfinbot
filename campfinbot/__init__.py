@@ -7,17 +7,23 @@ from pymongo import MongoClient
 ACCEPTABLE_FORMS = ['F3','F99']
 
 CHANNEL = os.environ.get("CAMPFINBOT_SLACK_CHANNEL", None)
-CANDIDATES_URL = "http://%s/campfin/svc/elections/us/v3/finances/2016/president/totals.json" % os.environ.get('CAMPFINBOT_CANDIDATES_HOST', '127.0.0.1:3000')
-FILINGS_URL = "http://%s/campfin/svc/elections/us/v3/finances/2016/filings.json" % os.environ.get('CAMPFINBOT_FILINGS_HOST', '127.0.0.1:3000')
+CANDIDATES_URL = "{}/api/v1/candidate/?format=json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
+CANDIDATE_FILINGS_URL = "{}/api/v1/candidatefiling/?format=json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
+PAC_FILINGS_URL = "{}/api/v1/pacandpartyfiling/?format=json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
 
 MONGODB_CLIENT = MongoClient(os.environ.get('CAMPFINBOT_MONGO_URL', 'mongodb://localhost:27017/'))
 MONGODB_DATABASE = MONGODB_CLIENT.campfinbot
 
 #generally we want to load new committees each time we run to keep up to date
-#but doing so makes debugging very hard, so you can set this envvar locally
+#but doing so makes debugging very hard because it deletes committees you've
+#manually added. so you can set this envvar locally
 #which will let you add new committees that don't get overwritten
 #in order to test specific situations.
 LOAD_COMMITTEES = os.environ.get("LOAD_COMMITTEES", True)
-if LOAD_COMMITTEES.lower() == 'false':
-    #ARG it reads the env var False as a string!!!! fix:
-    LOAD_COMMITTEES = False
+#it reads the env var False as a string!!!! fix:
+try:
+    load_comm_str = LOAD_COMMITTEES.lower()
+except AttributeError:
+    pass
+else:
+    LOAD_COMMITTEES = {"true":True, "false":False}[load_comm_str]

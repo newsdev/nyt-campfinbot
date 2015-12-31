@@ -10,7 +10,10 @@ def format_candidate(c):
     """
     payload = {}
     payload['campaign_committee'] = {"candidate_name": c['name'], "candidate_id": c['candidate_id'], "committee_name": c['name'] + "'s campaign committee", "committee_id": c["committee_id"]}
-    payload['associated_committees'] = [{"candidate_name": c['name'], "candidate_id": c['candidate_id'], "committee_name": a['committee']['name'], "committee_id": a['committee']['fecid']} for a in c['associated_committees']]
+
+    payload['associated_committees'] = []
+    for a in c['allpacs']:
+        payload['associated_committees'].append({"candidate_name": c['name'], "candidate_id": c['candidate_id'], "committee_name": a['committee_name'], "committee_id": a['fec_id']})
     return payload
 
 def load_committees(collection, committees):
@@ -32,32 +35,33 @@ def load_filings(collection, committees, recent_filings, alert=False):
     """
     messages = []
     for filing in recent_filings:
-        if filing['fec_committee_id'] in committees:
+        if filing['fec_id'] in committees:
             if not collection.find_one({'filing_id': filing['filing_id']}):
-                if filing['form_type'] in campfinbot.ACCEPTABLE_FORMS:
-                    if filing['cash_on_hand']:
+                form_type = filing['form_type'].rstrip('HSPAX')
+                if form_type in campfinbot.ACCEPTABLE_FORMS:
+                    if filing['coh_end']:
                         collection.insert(filing)
 
                         if alert:
                             message = "*%s* has just filed" % filing['committee_name']
                             if filing['is_amendment']:
-                                message += " AN AMENDMENT.\n%s" % filing['fec_uri']
+                                message += " AN AMENDMENT.\n%s" % filing['source_url']
                             else:
-                                message += ".\n%s" % filing['fec_uri']
+                                message += ".\n%s" % filing['source_url']
                             try:
-                                message += "\n\tReceipts: $%s" % humanize.intcomma(round(filing['receipts_total'], 2))
+                                message += "\n\tReceipts: $%s" % humanize.intcomma(round(filing['period_total_receipts'], 2))
                             except:
-                                message += "\n\tReceipts: %s" % filing['receipts_total']
+                                message += "\n\tReceipts: %s" % filing['period_total_receipts']
 
                             try:
                                 message += "\n\tCash on hand: $%s" % humanize.intcomma(round(filing['cash_on_hand'], 2))
                             except:
-                                message += "\n\tCash on hand: %s" % filing['cash_on_hand']
+                                message += "\n\tCash on hand: %s" % filing['coh_end']
 
                             try:
-                                message += "\n\tDisbursements: $%s" % humanize.intcomma(round(filing['disbursements_total'], 2))
+                                message += "\n\tDisbursements: $%s" % humanize.intcomma(round(filing['period_total_disbursements'], 2))
                             except:
-                                message += "\n\tDisbursements: %s" % filing['disbursements_total']
+                                message += "\n\tDisbursements: %s" % filing['period_total_disbursements']
 
                             messages.append(message)
 

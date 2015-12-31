@@ -21,7 +21,7 @@ def presidential_recent():
             campfinbot.MONGODB_DATABASE.presidential_committees,
             [a['campaign_committee'] for a in candidates])
 
-    recent_filings = json.loads(requests.get(campfinbot.FILINGS_URL).content)['results']
+    recent_filings = json.loads(requests.get(campfinbot.CANDIDATE_FILINGS_URL).content)['results']
 
     messages = utils.load_filings(
         campfinbot.MONGODB_DATABASE.presidential_filings,
