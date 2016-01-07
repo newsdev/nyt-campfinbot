@@ -40,26 +40,28 @@ def load_filings(collection, committees, recent_filings, alert=False):
                 form_type = filing['form_type'].rstrip('HSPAX')
                 if form_type in campfinbot.ACCEPTABLE_FORMS:
                     collection.insert(filing)
-                    if form_type in campfinbot.ALERT_FORMS and filing['coh_end'] and alert:
-                        message = "*%s* has just filed" % filing['committee_name']
+                    if form_type in campfinbot.ALERT_FORMS and alert:
+                        message = "*{comm}* has just filed a {form_type}".format(comm=filing['committee_name'],
+                                                                                 form_type=filing['form_type'])
                         if filing['is_amendment']:
-                            message += " AN AMENDMENT.\n%s" % filing['source_url']
+                            message += " AMENDMENT.\n%s" % filing['source_url']
                         else:
                             message += ".\n%s" % filing['source_url']
-                        try:
-                            message += "\n\tReceipts: $%s" % humanize.intcomma(round(float(filing['period_total_receipts']), 2))
-                        except:
-                            message += "\n\tReceipts: %s" % filing['period_total_receipts']
+                        if filing['has_cycle_totals']:
+                            try:
+                                message += "\n\tReceipts: $%s" % humanize.intcomma(round(float(filing['period_total_receipts']), 2))
+                            except:
+                                message += "\n\tReceipts: %s" % filing['period_total_receipts']
 
-                        try:
-                            message += "\n\tCash on hand: $%s" % humanize.intcomma(round(float(filing['coh_end']), 2))
-                        except:
-                            message += "\n\tCash on hand: %s" % filing['coh_end']
+                            try:
+                                message += "\n\tCash on hand: $%s" % humanize.intcomma(round(float(filing['coh_end']), 2))
+                            except:
+                                message += "\n\tCash on hand: %s" % filing['coh_end']
 
-                        try:
-                            message += "\n\tDisbursements: $%s" % humanize.intcomma(round(float(filing['period_total_disbursements']), 2))
-                        except:
-                            message += "\n\tDisbursements: %s" % filing['period_total_disbursements']
+                            try:
+                                message += "\n\tDisbursements: $%s" % humanize.intcomma(round(float(filing['period_total_disbursements']), 2))
+                            except:
+                                message += "\n\tDisbursements: %s" % filing['period_total_disbursements']
 
                         messages.append(message)
 
