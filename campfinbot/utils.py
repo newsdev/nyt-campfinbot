@@ -46,12 +46,12 @@ def load_filings(collection, committees, recent_filings, alert=False):
                 if form_type in campfinbot.ACCEPTABLE_FORMS:
                     collection.insert(filing)
                     if form_type in campfinbot.ALERT_FORMS and alert:
-                        message = "*{comm}* has just filed a {form_type}".format(comm=filing['committee_name'],
+                        message = "*{comm}* has filed a {form_type}".format(comm=filing['committee_name'],
                                                                                  form_type=filing['form_type'])
                         if filing['is_amendment']:
-                            message += " AMENDMENT.\n%s" % filing['source_url']
-                        else:
-                            message += ".\n%s" % filing['source_url']
+                            message += " AMENDMENT"
+                        
+                        message += "on {date}.\n{url}".format(date=filing['filed_date'], url=filing['source_url'])
                         if filing['has_cycle_totals']:
                             try:
                                 message += "\n\tReceipts: $%s" % humanize.intcomma(round(float(filing['period_total_receipts']), 2))

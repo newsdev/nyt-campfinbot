@@ -25,7 +25,7 @@ committees = []
 for a in candidates:
     committees += a['associated_committees']
 utils.load_committees(
-    campfinbot.MONGODB_DATABASE.presidential_pac_committees,
+    campfinbot.MONGODB_DATABASE.presidential_committees,
     committees)
 
 # Load filings associated with presidential campaign committees.
@@ -37,5 +37,5 @@ utils.load_filings(
 # Load filings associated with presidential PACs and SuperPACs.
 utils.load_filings(
     campfinbot.MONGODB_DATABASE.presidential_filings,
-    [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_pac_committees.find()],
+    [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_committees.find()],
     pac_filings)

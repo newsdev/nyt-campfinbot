@@ -19,9 +19,10 @@ def summarize_f24s():
             continue
         info = {'comm':f['committee_name'],
                 'ie_count':f['num_ies'],
-                'link':f['source_url']
+                'link':f['source_url'],
+                'date':f['filed_date']
                 }
-        message += "\n\t {comm} filed an F24 with {ie_count} IEs: {link}".format(**info)
+        message += "\n\t [{date}] {comm} filed an F24 with {ie_count} IEs: {link}".format(**info)
         f['alerted'] = True
         campfinbot.MONGODB_DATABASE.presidential_filings.save(f)
 
