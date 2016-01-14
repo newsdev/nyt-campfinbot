@@ -1,6 +1,11 @@
 import humanize
 
 import campfinbot
+import json
+import requests
+import sys
+
+import logging
 
 def format_candidate(c):
     """
@@ -66,3 +71,14 @@ def load_filings(collection, committees, recent_filings, alert=False):
                         messages.append(message)
 
     return messages
+
+def load_json(endpoint, tries=5):
+    i = 0
+    while i < tries:
+        try:
+            return json.loads(requests.get(endpoint).content)['results']
+        except Exception as e:
+            err = e
+        i += 1
+    logging.warning("Failed to load endpoint {tries} times, got error {err}".format(tries=tries, err=err))
+    return []

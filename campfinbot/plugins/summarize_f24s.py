@@ -1,5 +1,3 @@
-import json
-import requests
 
 import campfinbot
 from campfinbot import utils

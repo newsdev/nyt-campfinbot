@@ -8,13 +8,12 @@ important.
 """
 
 import campfinbot
-import json
 import requests
 from campfinbot import utils
 
-candidate_filings = json.loads(requests.get(campfinbot.CANDIDATE_FILINGS_URL).content)['results']
-pac_filings = json.loads(requests.get(campfinbot.PAC_FILINGS_URL).content)['results']
-candidates = [utils.format_candidate(c) for c in json.loads(requests.get(campfinbot.CANDIDATES_URL).content)['results']]
+candidate_filings = utils.load_json(campfinbot.CANDIDATE_FILINGS_URL)
+pac_filings = utils.load_json(campfinbot.PAC_FILINGS_URL)
+candidates = [utils.format_candidate(c) for c in utils.load_json(campfinbot.CANDIDATES_URL)]
 
 # Load presidential campaign committees.
 utils.load_committees(
