@@ -51,7 +51,7 @@ def load_filings(collection, committees, recent_filings, alert=False):
                         if filing['is_amendment']:
                             message += " AMENDMENT"
                         
-                        message += "on {date}.\n{url}".format(date=filing['filed_date'], url=filing['source_url'])
+                        message += " on {date}.\n{url}".format(date=filing['filed_date'], url=filing['source_url'])
                         if filing['has_cycle_totals']:
                             try:
                                 message += "\n\tReceipts: $%s" % humanize.intcomma(round(float(filing['period_total_receipts']), 2))
