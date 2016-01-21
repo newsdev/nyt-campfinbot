@@ -1,5 +1,3 @@
-import json
-import requests
 
 import campfinbot
 from campfinbot import utils
@@ -16,16 +14,20 @@ def presidential_pacs_recent():
     """
 
     if campfinbot.LOAD_COMMITTEES:
-        candidates = [utils.format_candidate(c) for c in json.loads(requests.get(campfinbot.CANDIDATES_URL).content)['results']]
+        candidates = [utils.format_candidate(c) for c in utils.load_json(campfinbot.CANDIDATES_URL)]
+        committees = []
+        for c in candidates:
+            committees.extend(c['associated_committees'])
+
         utils.load_committees(
             campfinbot.MONGODB_DATABASE.presidential_committees,
-            [a['campaign_committee'] for a in candidates])
+            committees)
 
-    recent_filings = json.loads(requests.get(campfinbot.FILINGS_URL).content)['results']
+    recent_filings = utils.load_json(campfinbot.PAC_FILINGS_URL)
 
     messages = utils.load_filings(
-        campfinbot.MONGODB_DATABASE.presidential_pac_filings,
-        [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_pac_committees.find()],
+        campfinbot.MONGODB_DATABASE.presidential_filings,
+        [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_committees.find()],
         recent_filings,
         alert=True)
 
