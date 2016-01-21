@@ -61,8 +61,22 @@ def pip_install():
     api.run('workon %s && pip install -r requirements.txt' % PROJECT_NAME)
 
 @api.task
+def preload():
+    api.run('workon %s && python -m campfinbot.preload' % PROJECT_NAME)
+
+
+@api.task
 def bounce_daemon():
     api.run('sudo service %s restart' % PROJECT_NAME.split('nyt-')[1])
+
+@api.task
+def stop_daemon():
+    api.run('sudo service %s stop' % PROJECT_NAME.split('nyt-')[1])
+
+@api.task
+def start_daemon():
+    api.run('sudo service %s start' % PROJECT_NAME.split('nyt-')[1])
+
 
 @api.task
 def deploy():
