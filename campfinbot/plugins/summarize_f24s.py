@@ -17,6 +17,8 @@ def summarize_f24s():
     for f in f24s:
         if 'alerted' in f and f['alerted']: #should only have loaded non-alerted, but double checking
             continue
+        if f['filed_date'] <= campfinbot.EARLIEST_ALERT:
+            continue
         info = {'comm':f['committee_name'],
                 'ie_count':f['num_ies'],
                 'link':f['source_url'],

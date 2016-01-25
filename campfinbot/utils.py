@@ -4,6 +4,8 @@ import campfinbot
 import json
 import requests
 import sys
+import os
+import datetime
 
 import logging
 
@@ -45,7 +47,7 @@ def load_filings(collection, committees, recent_filings, alert=False):
                 form_type = filing['form_type'].rstrip('HSPAX')
                 if form_type in campfinbot.ACCEPTABLE_FORMS:
                     collection.insert(filing)
-                    if form_type in campfinbot.ALERT_FORMS and alert:
+                    if form_type in campfinbot.ALERT_FORMS and alert and filing['filed_date'] > campfinbot.EARLIEST_ALERT:
                         message = "*{comm}* has filed a {form_type}".format(comm=filing['committee_name'],
                                                                                  form_type=filing['form_type'])
                         if filing['is_amendment']:
@@ -67,6 +69,15 @@ def load_filings(collection, committees, recent_filings, alert=False):
                                 message += "\n\tDisbursements: $%s" % humanize.intcomma(round(float(filing['period_total_disbursements']), 2))
                             except:
                                 message += "\n\tDisbursements: %s" % filing['period_total_disbursements']
+                        
+                        #Kitty wants to know about bernie filings immediately
+                        if filing['fec_id'] in ['C00577130']:
+                            try:
+                                kitty_user = os.environ['KITTY']
+                            except KeyError:
+                                message += "\nHEADS UP kitty"
+                            else:
+                                message += "\n HEADS UP {}".format(kitty_user)
 
                         messages.append(message)
 

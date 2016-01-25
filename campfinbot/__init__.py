@@ -1,16 +1,22 @@
 import os
+import datetime
 
 from pymongo import MongoClient
 
 # F3: Periodic filing.
 # F99: Responses to the FEC.
-ALERT_FORMS = ['F3','F99'] #forms to alert immediately
+ALERT_FORMS = ['F3','F99', 'F3L'] #forms to alert immediately
 ACCEPTABLE_FORMS = ALERT_FORMS + ['F24'] #forms to load into db
 
 CHANNEL = os.environ.get("CAMPFINBOT_SLACK_CHANNEL", None)
 CANDIDATES_URL = "{}/api/v1/candidate/totals.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
 CANDIDATE_FILINGS_URL = "{}/api/v1/candidatefilings.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
 PAC_FILINGS_URL = "{}/api/v1/pacandpartyfilings.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
+
+#don't alert forms filed before this date
+#prevents alerting old forms when new committees added
+EARLIEST_ALERT = (datetime.date.today() - datetime.timedelta(days=4)).strftime('%Y-%m-%d')
+
 
 MONGODB_CLIENT = MongoClient(os.environ.get('CAMPFINBOT_MONGO_URL', 'mongodb://localhost:27017/'))
 MONGODB_DATABASE = MONGODB_CLIENT.campfinbot
