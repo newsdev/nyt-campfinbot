@@ -14,10 +14,7 @@ def presidential_pacs_recent():
     """
 
     if campfinbot.LOAD_COMMITTEES:
-        candidates = [utils.format_candidate(c) for c in utils.load_json(campfinbot.CANDIDATES_URL)]
-        committees = []
-        for c in candidates:
-            committees.extend(c['associated_committees'])
+        committees = [utils.get_committee(c) for c in utils.load_json(campfinbot.COMMITTEE_URL)]
 
         utils.load_committees(
             campfinbot.MONGODB_DATABASE.presidential_committees,

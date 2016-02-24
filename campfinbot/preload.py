@@ -13,20 +13,12 @@ from campfinbot import utils
 
 candidate_filings = utils.load_json(campfinbot.CANDIDATE_FILINGS_URL)
 pac_filings = utils.load_json(campfinbot.PAC_FILINGS_URL)
-candidates = [utils.format_candidate(c) for c in utils.load_json(campfinbot.CANDIDATES_URL)]
+committees = [utils.get_committee(c) for c in utils.load_json(campfinbot.COMMITTEES_URL)]
 
 # Load presidential campaign committees.
 utils.load_committees(
-    campfinbot.MONGODB_DATABASE.presidential_committees,
-    [a['campaign_committee'] for a in candidates])
+    campfinbot.MONGODB_DATABASE.presidential_committees, committees)
 
-# Load associated presidential PACs and SuperPACs.
-committees = []
-for a in candidates:
-    committees += a['associated_committees']
-utils.load_committees(
-    campfinbot.MONGODB_DATABASE.presidential_committees,
-    committees)
 
 # Load filings associated with presidential campaign committees.
 utils.load_filings(

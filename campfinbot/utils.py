@@ -9,19 +9,12 @@ import datetime
 
 import logging
 
-def format_candidate(c):
+def get_committee(c):
     """
-    Returns an object with a single campaign committee and a list
-    of associated PACs and SuperPACs, each formatted properly.
-    Used for identifying if a given filing should be alerted or not.
+    Returns an object with a single committee
     """
-    payload = {}
-    payload['campaign_committee'] = {"candidate_name": c['name'], "candidate_id": c['candidate_id'], "committee_name": c['name'] + "'s campaign committee", "committee_id": c["committee_id"]}
+    return {"candidate_names": c['candidates'], "committee_name": c['committee_name'], "committee_id": c["fec_id"]}
 
-    payload['associated_committees'] = []
-    for a in c['allpacs']:
-        payload['associated_committees'].append({"candidate_name": c['name'], "candidate_id": c['candidate_id'], "committee_name": a['committee_name'], "committee_id": a['fec_id']})
-    return payload
 
 def load_committees(collection, committees):
     """

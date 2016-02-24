@@ -14,10 +14,11 @@ def presidential_recent():
     """
 
     if campfinbot.LOAD_COMMITTEES:
-        candidates = [utils.format_candidate(c) for c in utils.load_json(campfinbot.CANDIDATES_URL)]
+        committees = [utils.get_committee(c) for c in utils.load_json(campfinbot.COMMITTEE_URL)]
+
         utils.load_committees(
             campfinbot.MONGODB_DATABASE.presidential_committees,
-            [a['campaign_committee'] for a in candidates])
+            committees)
 
     recent_filings = utils.load_json(campfinbot.CANDIDATE_FILINGS_URL)
 

@@ -9,7 +9,7 @@ ALERT_FORMS = ['F3','F99', 'F3L'] #forms to alert immediately
 ACCEPTABLE_FORMS = ALERT_FORMS + ['F24'] #forms to load into db
 
 CHANNEL = os.environ.get("CAMPFINBOT_SLACK_CHANNEL", None)
-CANDIDATES_URL = "{}/api/v1/candidate/totals.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
+COMMITTEE_URL = "{}/api/v1/committees.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
 CANDIDATE_FILINGS_URL = "{}/api/v1/candidatefilings.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
 PAC_FILINGS_URL = "{}/api/v1/pacandpartyfilings.json".format(os.environ.get('API_BASE', '127.0.0.1:8000'))
 
