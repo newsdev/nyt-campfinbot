@@ -35,7 +35,8 @@ def load_filings(collection, committees, recent_filings, alert=False):
     """
     messages = []
     for filing in recent_filings:
-        if filing['fec_id'] in committees:
+        committee = [c for c in committees if str(c['committee_id']) == str(filing['fec_id'])]
+        if len(committee) > 0:
             if not collection.find_one({'filing_id': filing['filing_id']}):
                 form_type = filing['form_type'].rstrip('HSPAX')
                 if form_type in campfinbot.ACCEPTABLE_FORMS:
@@ -62,15 +63,9 @@ def load_filings(collection, committees, recent_filings, alert=False):
                                 message += "\n\tDisbursements: $%s" % humanize.intcomma(round(float(filing['period_total_disbursements']), 2))
                             except:
                                 message += "\n\tDisbursements: %s" % filing['period_total_disbursements']
-                        
-                        #Kitty wants to know about bernie filings immediately
-                        if filing['fec_id'] in ['C00577130']:
-                            try:
-                                kitty_user = os.environ['KITTY']
-                            except KeyError:
-                                message += "\nHEADS UP kitty"
-                            else:
-                                message += "\n HEADS UP {}".format(kitty_user)
+                        candidate_names = len(committee[0]['candidate_names'])
+                        if candidate_names > 0:
+                            message += "\n\tThis committee supports {}".format(" and ".join(committee[0]['candidate_names']))
 
                         messages.append(message)
 

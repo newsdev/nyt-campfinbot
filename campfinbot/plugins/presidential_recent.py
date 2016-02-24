@@ -24,7 +24,7 @@ def presidential_recent():
 
     messages = utils.load_filings(
         campfinbot.MONGODB_DATABASE.presidential_filings,
-        [c['committee_id'] for c in campfinbot.MONGODB_DATABASE.presidential_committees.find()],
+        campfinbot.MONGODB_DATABASE.presidential_committees.find(),
         recent_filings,
         alert=True)
 
