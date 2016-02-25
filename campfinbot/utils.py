@@ -33,9 +33,10 @@ def load_filings(collection, committees, recent_filings, alert=False):
     new filings into the collection.
     Returns a list of messages if alert has been set to True.
     """
+    committees = [c for c in committees] #otherwise it uses up the cursor
     messages = []
     for filing in recent_filings:
-        committee = [c for c in committees if str(c['committee_id']) == str(filing['fec_id'])]
+        committee = [c for c in committees if unicode(c['committee_id']) == unicode(filing['fec_id'])]
         if len(committee) > 0:
             if not collection.find_one({'filing_id': filing['filing_id']}):
                 form_type = filing['form_type'].rstrip('HSPAX')
