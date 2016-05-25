@@ -33,6 +33,13 @@ def load_filings(collection, committees, recent_filings, alert=False):
     new filings into the collection.
     Returns a list of messages if alert has been set to True.
     """
+
+    if campfinbot.EXCLUDED_COMMITTEE_PATH:
+        with open(campfinbot.EXCLUDED_COMMITTEE_PATH, 'r') as f:
+            excluded_comms = [c.strip() for c in f]
+    else:
+        excluded_comms = []
+
     committees = [c for c in committees] #otherwise it uses up the cursor
     messages = []
     for filing in recent_filings:
@@ -42,7 +49,7 @@ def load_filings(collection, committees, recent_filings, alert=False):
                 form_type = filing['form_type'].rstrip('HSPAX')
                 if form_type in campfinbot.ACCEPTABLE_FORMS:
                     collection.insert(filing)
-                    if form_type in campfinbot.ALERT_FORMS and alert and filing['filed_date'] > campfinbot.EARLIEST_ALERT:
+                    if form_type in campfinbot.ALERT_FORMS and alert and filing['filed_date'] > campfinbot.EARLIEST_ALERT and filing['fec_id'] not in excluded_comms:
                         message = "*{comm}* has filed a {form_type}".format(comm=filing['committee_name'],
                                                                                  form_type=filing['form_type'])
                         if filing['is_amendment']:

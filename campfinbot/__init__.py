@@ -17,6 +17,8 @@ PAC_FILINGS_URL = "{}/api/v1/pacandpartyfilings.json".format(os.environ.get('API
 #prevents alerting old forms when new committees added
 EARLIEST_ALERT = (datetime.date.today() - datetime.timedelta(days=4)).strftime('%Y-%m-%d')
 
+#path to file with committees we don't want to alert
+EXCLUDED_COMMITTEE_PATH = os.environ.get("EXCLUDED_COMMITTEE_PATH", None)
 
 MONGODB_CLIENT = MongoClient(os.environ.get('CAMPFINBOT_MONGO_URL', 'mongodb://localhost:27017/'))
 MONGODB_DATABASE = MONGODB_CLIENT.campfinbot
