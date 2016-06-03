@@ -37,8 +37,10 @@ def load_filings(collection, committees, recent_filings, alert=False):
     if campfinbot.EXCLUDED_COMMITTEE_PATH:
         with open(campfinbot.EXCLUDED_COMMITTEE_PATH, 'r') as f:
             excluded_comms = [c.strip() for c in f]
+            logging.info("excluding comms: {}".format(', '.join(excluded_comms)))
     else:
         excluded_comms = []
+        logging.info("No comms to exclude")
 
     committees = [c for c in committees] #otherwise it uses up the cursor
     messages = []
