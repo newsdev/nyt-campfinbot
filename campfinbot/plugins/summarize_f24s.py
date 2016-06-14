@@ -4,7 +4,12 @@ from campfinbot import utils
 
 outputs = []
 crontable = []
-crontable.append([86400, "summarize_f24s"])
+
+"""
+this notifier is just not that useful
+uncomment line below to start it up again every 24 hrs
+"""
+#crontable.append([86400, "summarize_f24s"])
 
 
 def summarize_f24s():
